@@ -1,0 +1,166 @@
+﻿@page
+@model ingreso_kpi_1.Pages.IngresoKPIModel
+@using System.Data
+@{
+}
+
+<h1>Ingreso de KPI</h1>
+
+<div class="container">
+
+    <form asp-page-handler="SelUnidad" method="post">
+        <div class="row">
+            <div class="col-6 mb-3">
+                <label for="kpi" class="form-label">Unidad</label>
+
+                <!-- Carga Unidades -->
+
+                <select class="form-select" name="Unidad">
+                    @foreach (DataRow fila in Model.tablaUnidades.Rows)
+                    {
+                        string nombre;
+
+                        if (fila["superintendencia"].ToString() == "-")
+                        {
+                            nombre = "[Gerencia:] " + fila["gerencia"].ToString();
+                        }
+                        else
+                        {
+                            nombre = "[Gerencia] " + fila["gerencia"].ToString() + " [Superint.] " + fila["superintendencia"].ToString();
+                        }
+
+                        if ((int)fila["id"] == Model.idUnidad)
+                        {
+                            <option value="@fila["id"]" selected>@nombre</option>
+                        }
+                        else
+                        {
+                            <option value="@fila["id"]">@nombre</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="col-3 mb-3 align-self-end">
+                <input type="submit" value="Seleccionar Unidad" class="btn btn-primary form-control ">
+            </div>
+
+        </div>
+    </form>
+
+    <form asp-page-handler="SelKPI" method="post">
+        <div class="row">
+            <div class="col-6 mb-3">
+                <label for="kpi" class="form-label">Nombre KPI</label>
+                <select class="form-select" name="kpi">
+                    @foreach (DataRow fila in Model.tablaKPI.Rows)
+                    {
+                        if((int)fila["id"]==Model.idKPI)
+                        {
+                            <option value="@fila["id"]" selected>@fila["nombre"]</option>
+                        }
+                        else
+                        {
+                            <option value="@fila["id"]">@fila["nombre"]</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <input type="hidden" name="Unidad" value="@Model.idUnidad" />
+
+            <div class="col-3 mb-3 align-self-end">
+
+                @if(Model.idUnidad == 0)
+                {
+                    <input type="submit" value="Seleccionar KPI" class="btn btn-primary form-control " disabled>
+                }
+                else
+                {
+                    <input type="submit" value="Seleccionar KPI" class="btn btn-primary form-control ">
+                }
+
+
+                
+            </div>
+
+        </div>
+    </form>
+
+    <form asp-page-handler="cargaValor" method="post">
+
+        <input type="hidden" name="kpi" value="@Model.idKPI" />
+        
+        <input type="hidden" name="unidad" value="@Model.idUnidad" />
+        
+        <div class="row">
+
+            <div class="col-3 mb-3">
+
+                <label for="fecha" class="form-label">Semana</label>
+
+                <input type="date" class="form-control" name="fecha" />
+
+            </div>
+
+            <div class="col-3 mb-3">
+                <label for="valor" class="form-label">Valor</label>
+                <input type="number" class="form-control" name="valor" />
+            </div>
+
+            <div class="col-3 mb-3  align-self-end">
+
+                @if(Model.idKPI !=0 )
+                {
+                    <input type="submit" class="btn btn-primary form-control" value="Ingresar Valor" />
+                }
+                else
+                {
+                    <input type="submit" class="btn btn-primary form-control" value="Ingresar Valor" disabled />
+                }
+
+            </div>
+
+        </div>
+    </form>
+
+    @if(Model.idKPI != 0)
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Num.</th>
+                    <th>Nombre KPI</th>
+                    <th>Inicio de Semana</th>
+                    <th>Valor</th>
+                    <th>Gerencia</th>
+                    <th>Superintendencia</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @if (Model.tablaValores != null && Model.tablaValores.Rows.Count > 0)
+                {
+                    int i = 0;
+                    foreach (DataRow fila in Model.tablaValores.Rows)
+                    {
+                        i = i + 1;
+                        <tr>
+                            <td>@i</td>
+                            <td>@fila["nombre"]</td>
+                            <td>@DateTime.Parse(fila["inicio_semana"].ToString()).ToString("dd-MM-yyyy")</td>
+                            <td>@fila["actual"]</td>
+                            <td>@fila["gerencia"]</td>
+                            <td>@fila["superintendencia"]</td>
+                        </tr>
+                    }
+                }
+
+
+            </tbody>
+        </table>
+    }
+
+
+
+</div>

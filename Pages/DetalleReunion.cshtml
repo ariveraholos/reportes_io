@@ -1,0 +1,69 @@
+﻿@page
+@model ingreso_kpi_1.Pages.DetalleReunionModel
+@using System.Data
+@{
+}
+
+<h1>Detalle Reunión</h1>
+
+Id = @Model.IdReunion
+
+
+<h2>Safety Share</h2>
+
+<form asp-page-handler="SafetyShare" method="post">
+
+    <div class="row">
+        <div class="col-6">
+
+            <label class="col-form-label" for="safety_share">Safety Share</label>
+            <textarea class="form-control mb-3" name="safety_share">@Model.SafetyShare</textarea>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-2 mb-5">
+            <button class="btn btn-primary form-control ">Actualizar Safety Share</button>
+        </div>
+    </div>
+
+    <input type="hidden" name="id_reunion" value="@Model.IdReunion" />
+    <input type="hidden" name="id_unidad" value="@Model.IdUnidad" />
+
+</form>
+
+<h2>Reconocimientos</h2>
+
+<table class="table">
+
+    <thead>
+        <tr>
+            <th>Num.</th>
+            <th>Quién Reconoce</th>
+            <th>Quién es Reconocido</th>
+            <th>Pilar</th>
+            <th>Motivo</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @{
+            int i = 0;
+        }
+        @foreach(DataRow fila in Model.TablaReconocimientos.Rows)
+        {
+            i = i + 1;
+            <tr>
+                <td>@i</td>
+                <td>@fila["quien_reconoce"]</td>
+                <td>@fila["reconocido"]</td>
+                <td>@fila["pilar"]</td>
+                <td>@fila["motivo"]</td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+<a asp-page="NuevoReconocimiento" asp-route-id_unidad="@Model.IdUnidad" asp-route-id_reunion="@Model.IdReunion" class="btn btn-primary">Nuevo Reconocimiento</a>

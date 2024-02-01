@@ -1,0 +1,59 @@
+﻿@page
+@model ingreso_kpi_1.Pages.NuevoReconocimientoModel
+@using System.Data
+
+<h1>Nuevo Reconocimiento</h1>
+
+<form asp-page="DetalleReunion" asp-page-handler="GrabaReconocimiento" method="post">
+    
+    <input type="hidden" name="id_reunion" value="@Model.IdReunion" />
+    <input type="hidden" name="id_unidad" value="@Model.IdUnidad" />
+
+    <div class="row">
+
+        <div class="col-4 mb-3">
+            <label class="col-form-label" for="quien_reconoce">Quien Reconoce</label>
+            <select class="form-select" name="quien_reconoce">
+                @foreach(DataRow fila in Model.TablaPersonas.Rows)
+                {
+                    <option value="@fila["id"]">@fila["nombre"]</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-4 mb-3">
+            <label class="col-form-label" for="reconocido">Reconocido</label>
+            <select class="form-select" name="reconocido">
+                @foreach (DataRow fila in Model.TablaPersonas.Rows)
+                {
+                    <option value="@fila["id"]">@fila["nombre"]</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-4 mb-3">
+            <label class="col-form-label" for="pilar">Pilar</label>
+            <select class="form-select" name="pilar">
+                <option></option>
+                <option>Persona</option>
+                <option>Performance</option>
+                <option>Salud & Seguridad</option>
+            </select>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col mb-3">
+            <label class="col-form-label" for="motivo">Motivo</label>
+            <textarea type="text" class="form-control" name="motivo"></textarea>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-4 mb-3">
+            <button class="btn btn-primary">Grabar Reconocimiento</button>
+        </div>
+    </div>
+
+</form>

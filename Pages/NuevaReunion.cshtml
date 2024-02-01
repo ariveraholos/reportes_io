@@ -1,0 +1,45 @@
+﻿@page
+@model ingreso_kpi_1.Pages.NuevaReunionModel
+@{
+}
+
+
+<h1>Nueva Reunión</h1>
+
+<form asp-page-handler="NuevaReunion" method="post">
+
+    <div class="row">
+
+        <div class="col-3">
+            <label for="fecha" class="col-form-label">Fecha</label>
+            <input type="date" class="form-control mb-3" name="fecha" />
+
+
+            <label for="tipo_reunion" class="col-from-label">Tipo de Reunión</label>
+
+            <div class="input-group mb-3">
+                <div class="form-check mb-3 me-3">
+                    <input type="radio" class="form-check-input mb-3" name="tipo_reunion" value="MIP" />
+                    <label for="tipo_reunion" class="form-check-label">MIP</label>
+                </div>
+
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" name="tipo_reunion" value="MOP" />
+                    <label for="tipo_reunion" class="form-check-label">MOP</label>
+                </div>
+            </div>
+
+            <label class="col-form-label">Asistentes</label>
+
+            <label for="nombre_asistente" class="col-form-label">Nombre</label>
+            <input type="text" name="nombre-asistente" class="form-control mb-3" />
+
+            <button class="form-control btn btn-secondary mb-3">Agregar Asistente</button>
+
+            <button class="form-control btn btn-primary mb-3">Grabar Reunión</button>
+        </div>
+    </div>
+
+    <input type="hidden" name="id_unidad" value="" />
+
+</form>

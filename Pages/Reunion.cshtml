@@ -1,0 +1,109 @@
+﻿@page
+@model ingreso_kpi_1.Pages.ReunionModel
+@using System.Data
+@{
+}
+
+<h1>Reuniones</h1>
+
+<div class="container">
+    <form asp-page-handler="SelUnidad" method="post">
+        <div class="row">
+            <div class="col-6 mb-3">
+                <label for="kpi" class="form-label">Unidad</label>
+
+                <!-- Carga Unidades -->
+
+                <select class="form-select" name="id_unidad">
+                    @foreach (DataRow fila in Model.TablaUnidades.Rows)
+                    {
+                        string nombre;
+
+                        if (fila["superintendencia"].ToString() == "-")
+                        {
+                            nombre = "[Gerencia:] " + fila["gerencia"].ToString();
+                        }
+                        else
+                        {
+                            nombre = "[Gerencia] " + fila["gerencia"].ToString() + " [Superint.] " + fila["superintendencia"].ToString();
+                        }
+
+                        if ((int)fila["id"] == Model.IdUnidad)
+                        {
+                            <option value="@fila["id"]" selected>@nombre</option>
+                        }
+                        else
+                        {
+                            <option value="@fila["id"]">@nombre</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="col-3 mb-3 align-self-end">
+                <input type="submit" value="Seleccionar Unidad" class="btn btn-primary form-control ">
+            </div>
+
+        </div>
+    </form>
+
+
+    @if(Model.IdUnidad!=0)
+    {
+
+        <table class="table mb-5">
+            <thead>
+                <tr>
+                    <th>Núm.</th>
+                    <th>Fecha</th>
+                    <th>Tipo</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{int i = 0;}
+                @foreach(DataRow fila in Model.TablaReuniones.Rows)
+                {
+                    i++;
+                    <tr>
+                        <td>@i</td>
+                        <td>@DateTime.Parse(fila["fecha"].ToString()).ToString("dd-MM-yyyy")</td>
+                        <td>@fila["tipo"]</td>
+                        <td>@fila["estado"]</td>
+                        <td>
+                        
+                            @if(fila["estado"].ToString() != "Realizada")
+                            {
+                                <a asp-page="DetalleReunion" asp-route-id_unidad="@Model.IdUnidad" asp-route-id_reunion="@fila["id"]">
+                                    <i class="bi bi-pencil-square me-3"></i>
+                                </a>
+
+                                <a asp-page="KPIReunion" asp-route-id_unidad="@Model.IdUnidad" asp-route-id_reunion="@fila["id"]">
+                                <i class="bi bi-graph-up"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <i class="bi bi-search"></i>
+                            }
+
+                           
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="row">
+            <div class="col-2">
+                <button class="btn btn-secondary">Agenda</button>
+            </div>
+            <div class="col-2">
+                <button class="btn btn-secondary">Participantes</button>
+            </div>
+        </div>
+    }
+
+</div>
